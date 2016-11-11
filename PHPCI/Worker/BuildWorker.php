@@ -98,7 +98,8 @@ class BuildWorker
 
         while ($this->run) {
             // Get a job from the queue:
-            $job = $this->pheanstalk->reserve();
+            // Using phpci.build.failed_after to prevent builds re-spawning after the default 120 beanstalk timeout
+            $job = $this->pheanstalk->reserve(Config::getInstance()->get('phpci.build.failed_after', 1800));
 
             $this->checkJobLimit();
 
